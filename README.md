@@ -1,5 +1,5 @@
 # AndroidNetworkState
-Android Androidx网络状态检测
+Android 基于Kotlin的Androidx网络状态检测
 #### 1、依赖
 
 ```
