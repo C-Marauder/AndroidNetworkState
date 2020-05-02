@@ -1,3 +1,2 @@
-rootProject.name='NetworkState'
 include ':app'
-include ':networkstate'
+include ':NetworkState'

@@ -7,7 +7,7 @@ import androidx.lifecycle.*
 internal class LifecycleNetworkState(
     private val networkStateManager: NetworkStateManager,
     private val lifecycleOwner: LifecycleOwner,
-    private val onNetworkStateChange:(networkType:Int?,networkName:String?)->Unit
+    private val onNetworkStateChange:(isConnected:Boolean,networkType:Int?,networkName:String?)->Unit
 ) : LifecycleObserver, Observer<NetworkState> {
     private var mNetworkStateLiveDate:MutableLiveData<NetworkState>?=null
     private lateinit var mNetworkState: NetworkState
@@ -34,7 +34,7 @@ internal class LifecycleNetworkState(
 
     override fun onChanged(t: NetworkState?) {
         t?.let {
-            onNetworkStateChange(it.networkType,it.networkName)
+            onNetworkStateChange(t.isConnected,it.networkType,it.networkName)
         }
 
     }

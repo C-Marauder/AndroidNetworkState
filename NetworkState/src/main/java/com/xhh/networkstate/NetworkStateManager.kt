@@ -26,7 +26,7 @@ class NetworkStateManager private constructor(private val application: Applicati
             mNetworkManager.register()
         }
 
-        fun registerNetworkStateCallback(lifecycleOwner: LifecycleOwner,onNetworkStateChange: (networkType: Int?, networkName: String?) -> Unit){
+        fun registerNetworkStateCallback(lifecycleOwner: LifecycleOwner,onNetworkStateChange: (isConnectd:Boolean,networkType: Int?, networkName: String?) -> Unit){
             if (!Companion::mNetworkManager.isInitialized){
                 Log.e(TAG,"please init NetworkStateManager")
             }else{
@@ -142,7 +142,7 @@ class NetworkStateManager private constructor(private val application: Applicati
         }
     }
 
-    fun registerNetworkStateCallback(lifecycleOwner: LifecycleOwner,onNetworkStateChange:(networkType:Int?,networkName:String?)->Unit){
+    fun registerNetworkStateCallback(lifecycleOwner: LifecycleOwner,onNetworkStateChange:(isConnected:Boolean,networkType:Int?,networkName:String?)->Unit){
 
         val lifecycleNetworkState = LifecycleNetworkState(this,lifecycleOwner,onNetworkStateChange)
         mLifecycleNetworkState.add(lifecycleNetworkState)
@@ -162,7 +162,21 @@ class NetworkStateManager private constructor(private val application: Applicati
 
     private inner class NetworkStateReceiver: BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-
+            intent?.let {
+                if (it.action == ConnectivityManager.CONNECTIVITY_ACTION){
+                    context?.getSystemService(Context.CONNECTIVITY_SERVICE)?.let {cm->
+                        cm as ConnectivityManager
+                        cm.activeNetworkInfo?.let {networkInfo->
+                            isConnected = networkInfo.isConnectedOrConnecting
+                            mCurrentNetworkType = networkInfo.type
+                            mCurrentNetworkName = networkInfo.typeName
+                            mLifecycleNetworkState.forEach {lnt->
+                                lnt.dispatch(isConnected,mCurrentNetworkType,mCurrentNetworkName)
+                            }
+                        }
+                    }
+                }
+            }
         }
 
     }
