@@ -14,7 +14,7 @@ allprojects {
 }
 ```
 ```
-implementation 'com.xhh.networkstate:NetworkState:1.0.0'
+implementation 'com.xhh.networkstate:NetworkState:1.0.1'
 ```
 #### 2、使用
 
