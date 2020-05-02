@@ -1,6 +1,18 @@
 # AndroidNetworkState
 Android Androidx网络状态检测
 #### 1、依赖
+
+```
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven {
+            url("https://dl.bintray.com/xqy666666/maven")
+        }
+    }
+}
+```
 ```
 implementation 'com.xhh.networkstate:NetworkState:1.0.0'
 ```
